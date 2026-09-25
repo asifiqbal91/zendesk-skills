@@ -1,0 +1,17 @@
+<main class="container">
+  <h1>{{t 'search_results'}}</h1>
+  {{! Optional AI answer (theme api_version permitting): {{generative_answers}} }}
+  {{#if results}}
+  <ul class="search-results">
+    {{#each results}}
+    <li>
+      <a href="{{url}}">{{title}}</a>
+      {{! confirm snippet property name against search_results_page docs }}
+    </li>
+    {{/each}}
+  </ul>
+  {{pagination}}
+  {{else}}
+  <p>{{t 'no_results'}}</p>
+  {{/if}}
+</main>

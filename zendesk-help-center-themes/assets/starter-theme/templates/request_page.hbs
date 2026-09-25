@@ -1,0 +1,22 @@
+<main class="container">
+  {{breadcrumbs}}
+  <h1>{{request.subject}}</h1>
+  <div class="request-description">{{request.description}}</div>
+
+  {{#if comments}}
+  <ul class="comment-list">
+    {{#each comments}}
+    <li class="comment">
+      <strong>{{author.name}}</strong>
+      <time>{{date created_at}}</time>
+      <div>{{body}}</div>
+    </li>
+    {{/each}}
+  </ul>
+  {{/if}}
+
+  {{#form 'comment' class='comment-form'}}
+    {{wysiwyg 'body'}}
+    {{input type='submit'}}
+  {{/form}}
+</main>

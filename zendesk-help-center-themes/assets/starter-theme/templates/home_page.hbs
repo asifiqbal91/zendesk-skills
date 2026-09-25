@@ -1,0 +1,28 @@
+{{#is settings.show_hero true}}
+<section class="hero">
+  <div class="container">
+    <h1>{{help_center.name}}</h1>
+    {{search submit=false}}
+  </div>
+</section>
+{{/is}}
+
+<main class="container">
+  {{#if categories}}
+  <div class="category-grid">
+    {{#each categories}}
+    <section class="category-card">
+      <h2>{{#link "category"}}{{name}}{{/link}}</h2>
+      {{#if description}}<p>{{description}}</p>{{/if}}
+      <ul>
+        {{#each sections}}
+        <li>{{#link "section"}}{{name}}{{/link}}</li>
+        {{/each}}
+      </ul>
+    </section>
+    {{/each}}
+  </div>
+  {{else}}
+  <p>{{t "no_categories"}}</p>
+  {{/if}}
+</main>

@@ -1,0 +1,38 @@
+<main class="container article-layout">
+  {{breadcrumbs}}
+  <article>
+    <h1>{{article.title}}</h1>
+    <div class="article-meta">
+      {{#with article.author}}<span>{{name}}</span>{{/with}}
+      <time>{{date article.created_at}}</time>
+    </div>
+    <div class="article-body">{{article.body}}</div>
+
+    <div class="article-votes vote">
+      {{vote 'up' class="vote-up"}}
+      {{vote 'sum' class="vote-sum"}}
+      {{vote 'down' class="vote-down"}}
+    </div>
+  </article>
+
+  <section class="article-comments">
+    {{#if comments}}
+      <h2>{{t 'comments'}}</h2>
+      <ul class="comment-list">
+        {{#each comments}}
+        <li id="{{anchor}}" class="comment">
+          <img class="comment-avatar" src="{{author.avatar_url}}" alt="">
+          <div class="comment-author">{{author.name}}</div>
+          <time>{{date created_at}}</time>
+          <div class="comment-body">{{body}}</div>
+        </li>
+        {{/each}}
+      </ul>
+    {{/if}}
+
+    {{#form 'comment' class='comment-form'}}
+      {{wysiwyg 'body'}}
+      {{input type='submit'}}
+    {{/form}}
+  </section>
+</main>

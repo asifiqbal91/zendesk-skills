@@ -1,0 +1,21 @@
+<header class="site-header">
+  <div class="container">
+    <a class="site-logo" href="{{help_center.url}}">
+      {{#if settings.logo}}
+        <img src="{{settings.logo}}" alt="{{help_center.name}}">
+      {{else}}
+        <span>{{help_center.name}}</span>
+      {{/if}}
+    </a>
+    {{search}}
+    <nav class="site-nav">
+      {{#link "help_center"}}{{t "home"}}{{/link}}
+      {{#if signed_in}}
+        {{#link "requests"}}{{t "requests"}}{{/link}}
+        {{#link "sign_out"}}{{t "sign_out"}}{{/link}}
+      {{else}}
+        {{#link "sign_in"}}{{t "sign_in"}}{{/link}}
+      {{/if}}
+    </nav>
+  </div>
+</header>

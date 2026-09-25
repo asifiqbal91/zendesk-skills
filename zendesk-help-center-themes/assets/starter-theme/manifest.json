@@ -1,0 +1,92 @@
+{
+  "name": "Starter Theme",
+  "author": "Your Name",
+  "version": "1.0.0",
+  "api_version": 4,
+  "settings": [
+    {
+      "label": "Colors",
+      "variables": [
+        {
+          "identifier": "color_action_primary",
+          "type": "color",
+          "label": "Primary action color",
+          "description": "Buttons, links, and primary interactive elements.",
+          "value": "#0072EF"
+        },
+        {
+          "identifier": "color_text",
+          "type": "color",
+          "label": "Body text color",
+          "description": "Default text color for body and headings.",
+          "value": "#2F3941"
+        },
+        {
+          "identifier": "color_background",
+          "type": "color",
+          "label": "Background color",
+          "description": "Page background color.",
+          "value": "#FFFFFF"
+        }
+      ]
+    },
+    {
+      "label": "Fonts",
+      "variables": [
+        {
+          "identifier": "type_heading",
+          "type": "text",
+          "label": "Heading font stack",
+          "description": "CSS font-family value for headings.",
+          "value": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif"
+        },
+        {
+          "identifier": "type_body",
+          "type": "text",
+          "label": "Body font stack",
+          "description": "CSS font-family value for body text.",
+          "value": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif"
+        }
+      ]
+    },
+    {
+      "label": "Layout",
+      "variables": [
+        {
+          "identifier": "show_hero",
+          "type": "checkbox",
+          "label": "Show home page hero",
+          "description": "Toggle the hero/search band on the home page.",
+          "value": true
+        },
+        {
+          "identifier": "content_max_width",
+          "type": "range",
+          "label": "Content max width (px)",
+          "description": "Maximum width of the main content column.",
+          "value": 960,
+          "min": 720,
+          "max": 1280,
+          "step": 20
+        }
+      ]
+    },
+    {
+      "label": "Brand",
+      "variables": [
+        {
+          "identifier": "logo",
+          "type": "file",
+          "label": "Logo",
+          "description": "Your help center logo."
+        },
+        {
+          "identifier": "favicon",
+          "type": "file",
+          "label": "Favicon",
+          "description": "Icon shown in the browser tab."
+        }
+      ]
+    }
+  ]
+}

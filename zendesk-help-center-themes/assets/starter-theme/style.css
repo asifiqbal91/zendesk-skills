@@ -1,0 +1,75 @@
+/* Map manifest settings ($identifier) to CSS custom properties (tokens),
+   then style components against the tokens. Re-skin from the Settings panel. */
+:root {
+  --color-action-primary: $color_action_primary;
+  --color-text: $color_text;
+  --color-background: $color_background;
+  --type-heading: $type_heading;
+  --type-body: $type_body;
+  --content-max-width: #{$content_max_width}px;
+
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 32px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: var(--type-body);
+  color: var(--color-text);
+  background: var(--color-background);
+  line-height: 1.5;
+}
+
+h1, h2, h3 { font-family: var(--type-heading); }
+
+a { color: var(--color-action-primary); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.container {
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: var(--space-lg) var(--space-md);
+}
+
+.site-header .container,
+.site-footer .container {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding-top: var(--space-md);
+  padding-bottom: var(--space-md);
+}
+
+.site-logo img { max-height: 40px; display: block; }
+
+.hero {
+  background: var(--color-action-primary);
+  color: #fff;
+  text-align: center;
+  padding: var(--space-lg) var(--space-md);
+}
+.hero h1 { margin-top: 0; }
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--space-lg);
+}
+
+.category-card ul { list-style: none; padding: 0; margin: var(--space-sm) 0 0; }
+
+.article-body { margin-top: var(--space-md); }
+
+.article-meta {
+  display: flex;
+  gap: var(--space-md);
+  font-size: 0.875rem;
+  opacity: 0.7;
+}
+
+@media (max-width: 600px) {
+  .site-header .container { flex-wrap: wrap; }
+}

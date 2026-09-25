@@ -1,0 +1,13 @@
+<main class="container">
+  {{breadcrumbs}}
+  <h1>{{category.name}}</h1>
+  {{#if category.description}}<p class="lede">{{category.description}}</p>{{/if}}
+  <div class="section-list">
+    {{#each sections}}
+    <section>
+      <h2>{{#link "section"}}{{name}}{{/link}}</h2>
+      {{#if description}}<p>{{description}}</p>{{/if}}
+    </section>
+    {{/each}}
+  </div>
+</main>

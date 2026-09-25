@@ -1,0 +1,45 @@
+# Claude Code
+.claude/settings.local.json
+CLAUDE.local.md
+.claude/agent-memory-local/
+.claude/worktrees/
+
+# Gemini
+.gemini/.env
+.gemini-clipboard/
+GEMINI.local.md
+
+# Zendesk
+.zat
+
+# Secrets & environment
+.env
+.env.*
+!.env.example
+!.env.sample
+!.env.template
+*.pem
+*.key
+
+# Logs & temp
+*.log
+*.tmp
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+dist/
+build/
+*.egg-info/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Dependencies
+node_modules/
+
+# Archives
+*.zip
+*.tar.gz
