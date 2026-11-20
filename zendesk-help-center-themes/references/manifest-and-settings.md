@@ -35,10 +35,10 @@ Each group has a label and a `variables` array. Groups become headings (Colors, 
     "label": "Colors",
     "variables": [
       {
-        "identifier": "color_brand",
+        "identifier": "brand_color",
         "type": "color",
-        "label": "color_brand_label",
-        "description": "color_brand_description",
+        "label": "brand_color_label",
+        "description": "brand_color_description",
         "value": "#0072EF"
       }
     ]
@@ -47,9 +47,9 @@ Each group has a label and a `variables` array. Groups become headings (Colors, 
 ```
 
 Each variable object:
-- `identifier` — the variable name; how you reference it (`settings.color_brand`, `$color_brand`). **Naming rule: use only lowercase letters, digits, and underscores** (`^[a-z0-9_]+$`). No hyphens, spaces, or uppercase — a hyphen breaks both the CSS variable and the Curlybars dot-path (`settings.brand-color` parses as subtraction, not a property). Use `brand_color`, never `brand-color`.
+- `identifier` — the variable name; how you reference it (`settings.brand_color`, `$brand_color`). **Naming rule: only lowercase letters, digits, and underscores** (`^[a-z0-9_]+$`), **30 characters max**. A hyphen breaks both the CSS variable and the Curlybars dot-path (`settings.brand-color` parses as subtraction). Use `brand_color`, never `brand-color`.
 - `type` — the UI control (see below).
-- `label`, `description` — shown in the panel. These can be literal strings or translation keys resolved from `translations.yml` / `translations/`.
+- `label`, `description` — shown in the panel. Literal strings or translation keys resolved from `translations/<locale>.json`. **Label ≤ 40 characters, description ≤ 80 characters** (after resolving the key).
 - `value` — default value (for `file` types, supply a default file in `settings/` instead).
 
 ## Required variables
@@ -69,15 +69,34 @@ The `type` maps to a Settings-panel control. The standard set:
 
 | type | Control | Notes |
 | --- | --- | --- |
-| `text` | Single-line text input | ~1000-char limit per field |
-| `textarea` | Multi-line text | longer free text |
+| `text` | Single-line text input | value ≤ 1000 characters |
 | `checkbox` | Boolean toggle | value is `true`/`false` |
-| `range` | Slider | numeric value within a min/max/step you define |
-| `list` | Dropdown | provide selectable options |
+| `range` | Slider | `min`, `max`, `value` are **integers**; `step` is not documented |
+| `list` | Dropdown | `options` array of `{label, value}`: **2–20 options**, option label ≤ 40 chars, `value` must be one of them |
 | `color` | Color picker | hex value, e.g. `#0072EF` |
-| `file` | File upload | needs a default file in `settings/`; required for `logo`/`favicon` |
+| `file` | File upload | **no `value` key**; default file `settings/<identifier>.<ext>`; required for `logo`/`favicon` |
 
-Confirm the exact attributes each type accepts (e.g. `min`/`max`/`step` for `range`, option entries for `list`) against the Settings-panel reference, since these are occasionally extended.
+These six are the only documented types. **There is no `textarea`** — use `text` for longer copy (1000 chars). The
+panel input is single-line; for multi-line or per-language copy see `recipes.md` → "Localizing theme-only copy"
+(Dynamic Content).
+
+`list` example (fonts as a chooser — Copenhagen uses `list` for `heading_font` / `text_font`; values are CSS font stacks):
+
+```json
+{
+  "identifier": "heading_font",
+  "type": "list",
+  "label": "heading_font_label",
+  "description": "heading_font_description",
+  "value": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif",
+  "options": [
+    { "label": "System", "value": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" },
+    { "label": "Georgia", "value": "Georgia, 'Times New Roman', serif" }
+  ]
+}
+```
+
+Option labels may be literal text (as above) or translation keys.
 
 ## File-type settings and the settings/ folder
 
@@ -86,30 +105,63 @@ For any `file` variable, drop a default file in `settings/` so the panel has som
 ## Translations for setting labels
 
 `label`/`description` values can be keys resolved from translation files:
-- The top-level `translations.yml` is reserved for **Settings-panel strings only** (labels, descriptions, list options).
-- Do **not** put template/UI copy here — template strings use the `{{t}}` helper and Help Center's exposed keys.
-- Locale JSON under `translations/` (e.g. `en-us.json`) carries translated versions. For custom themes, manage these manually.
+- `translations/<locale>.json` (e.g. `en-us.json`) is a **flat JSON object** mapping each key used in `label`,
+  `description` or an option `label` to its text: `{ "brand_color_label": "Brand color", "brand_color_description": "Buttons and links." }`.
+  Add one file per locale to translate the Settings panel. Literal labels (no file) also work; keys are the
+  Marketplace-friendly choice. These files are for **Settings-panel strings only**.
+- Do **not** put template copy there: `{{t}}` only resolves Help Center's own keys (`references/t-keys.txt`). Theme-only copy belongs in `text` settings.
 
 ## Using settings in code
 
-CSS:
+### In the root `style.css` (preferred for anything visual)
+
+Zendesk processes the root `style.css` and substitutes setting values before serving it. Supported, as used by
+Copenhagen: `$identifier`, `url($file_setting)`, `darken($color, 10%)`, `lighten($color, 20%)`. For numbers that need a
+unit, use plain CSS: `calc($content_width * 1px)` (`#{$var}px` interpolation is not documented).
+
+Map settings to custom properties once, then style everything against the properties (including CSS in `assets/`):
+
 ```css
-.button { background: $color_brand; }
-.search { max-width: #{$search_width}px; }
+:root {
+  --brand: $brand_color;
+  --font-heading: $heading_font;            /* font stacks with quotes are safe here */
+  --radius: calc($corner_radius * 1px);
+  --hero-image: url($homepage_background_image);
+}
+html[data-theme="dark"] { --bg: $dark_background_color; }
 ```
 
-Curlybars (templates):
+### In templates
+
 ```hbs
-<body style="--brand: {{settings.color_brand}};">
-<h1 style="font-family: {{{settings.heading_font}}};">{{help_center.name}}</h1>
-{{#is settings.show_hero}} <section class="hero">…</section> {{/is}}
+{{#if settings.show_hero}} <section class="hero">…</section> {{/if}}
+<a href="{{settings.status_page_url}}">{{settings.status_page_label}}</a>
+<script>const settings = {{json settings}};</script>
 ```
+
+Template output is HTML-escaped and triple-stache is rejected on import, so **don't inject font stacks or URLs into a
+`<style>` block via `{{settings.x}}`** — quotes become `&#39;` and the CSS breaks. Use `style.css` instead. Inside
+`{{#each}}`, reach settings with `../settings.x`.
+
+### Copenhagen-compatible identifiers
+
+Zendesk-rendered UI (the v4 request form and other Copenhagen modules, flash notifications, generative answers) reads
+theme colors by Copenhagen's identifiers. Use these names for the matching settings so that UI follows the brand:
+`brand_color`, `brand_text_color`, `text_color`, `link_color`, `hover_link_color`, `visited_link_color`,
+`background_color`, `heading_font`, `text_font`. Name theme-specific settings however you like.
 
 ## Limits to respect
 
-- Total number of settings in `manifest.json` is capped (see Guide product limits). Don't expose hundreds of knobs.
-- Theme/file size and file-count ceilings exist; oversized themes fail import.
-- Full limits: <https://support.zendesk.com/hc/en-us/articles/4408831783962> (Guide theming limits) — verify current numbers there.
+| Limit | Value |
+| --- | --- |
+| Settings in `manifest.json` | 200 |
+| Identifier length | 30 chars, `^[a-z0-9_]+$` |
+| Label / description | 40 / 80 chars |
+| Options per `list` | 2–20 (option label ≤ 40) |
+| `text` value | 1000 chars |
+
+`scripts/validate_theme.py` enforces all of these. Source:
+<https://support.zendesk.com/hc/en-us/articles/4408846524954> and <https://support.zendesk.com/hc/en-us/articles/4408831783962>.
 
 ## Token-driven design tip
 

@@ -1,4 +1,16 @@
-<main class="container">
-  <h1>{{t "my_requests"}}</h1>
-  {{request_list}}
+<main id="main-content" class="container">
+  <h1>{{t 'requests'}}</h1>
+  <div id="request-list"></div>
 </main>
+
+<script type="module">
+  import { renderRequestList } from "request-list";
+
+  renderRequestList({{json settings}}, {
+    locale: {{json help_center.locale}},
+    baseLocale: {{json help_center.base_locale}},
+    customStatusesEnabled: {{json help_center.custom_statuses_enabled}},
+    viewRequestsAcrossBrandsEnabled: {{json help_center.view_requests_across_brands_enabled}},
+    filterTicketFieldsByBrand: true
+  }, document.getElementById("request-list"));
+</script>

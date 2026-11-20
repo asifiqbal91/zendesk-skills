@@ -1,0 +1,11 @@
+<main id="main-content" class="container">
+  {{breadcrumbs}}
+  <h1>{{t 'what_is_your_post_about'}}</h1>
+  {{#form 'post' class='post-form'}}
+    <div class="form-field">{{label 'title'}} {{input 'title' autofocus=true}} {{#validate 'title'}}{{error 'title'}}{{/validate}}</div>
+    {{suggestion_list}}
+    <div class="form-field">{{label 'details'}} {{wysiwyg 'details'}} {{#validate 'details'}}{{error 'details'}}{{/validate}}</div>
+    <div class="form-field">{{label 'topic'}} {{select 'topic'}} {{#validate 'topic'}}{{error 'topic'}}{{/validate}}</div>
+    {{input type='submit'}}
+  {{/form}}
+</main>

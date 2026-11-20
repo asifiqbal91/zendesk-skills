@@ -1,6 +1,34 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{{page_title}}</title>
-{{#if settings.favicon}}<link rel="icon" href="{{settings.favicon}}">{{/if}}
-{{! Add extra <head> assets via the asset helper, e.g.:
-    <link rel="stylesheet" href="{{asset 'fonts.css'}}"> }}
+{{! Zendesk injects <title>, the favicon, style.css and script.js — don't add them here.
+    Extra assets go through the asset helper, e.g. <link rel="stylesheet" href="{{asset 'fonts.css'}}"> }}
+
+{{! Templating API v4 modules (request form, request list, service catalog, approvals,
+    flash notifications). Fill assets/ first: bash scripts/vendor_copenhagen_modules.sh <theme-dir> }}
+<script>
+  if (!(HTMLScriptElement.supports && HTMLScriptElement.supports('importmap'))) {
+    document.write('<script async src="{{asset 'es-module-shims.js'}}"><\/script>');
+  }
+</script>
+<script type="importmap">
+{
+  "imports": {
+    "new-request-form": "{{asset 'new-request-form-bundle.js'}}",
+    "request-list": "{{asset 'request-list-bundle.js'}}",
+    "flash-notifications": "{{asset 'flash-notifications-bundle.js'}}",
+    "service-catalog": "{{asset 'service-catalog-bundle.js'}}",
+    "approval-requests": "{{asset 'approval-requests-bundle.js'}}",
+    "approval-requests-translations": "{{asset 'approval-requests-translations-bundle.js'}}",
+    "new-request-form-translations": "{{asset 'new-request-form-translations-bundle.js'}}",
+    "request-list-translations": "{{asset 'request-list-translations-bundle.js'}}",
+    "service-catalog-translations": "{{asset 'service-catalog-translations-bundle.js'}}",
+    "shared": "{{asset 'shared-bundle.js'}}",
+    "ticket-fields": "{{asset 'ticket-fields-bundle.js'}}",
+    "wysiwyg": "{{asset 'wysiwyg-bundle.js'}}"
+  }
+}
+</script>
+<script type="module">
+  import { renderFlashNotifications } from "flash-notifications";
+  renderFlashNotifications({{json settings}}, {{json help_center.base_locale}}, {{json help_center.locale}});
+</script>

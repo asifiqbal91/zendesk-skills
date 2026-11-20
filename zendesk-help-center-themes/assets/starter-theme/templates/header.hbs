@@ -1,20 +1,18 @@
+<a class="skip-link" href="#main-content">{{t 'skip_navigation'}}</a>
 <header class="site-header">
   <div class="container">
-    <a class="site-logo" href="{{help_center.url}}">
-      {{#if settings.logo}}
-        <img src="{{settings.logo}}" alt="{{help_center.name}}">
-      {{else}}
-        <span>{{help_center.name}}</span>
-      {{/if}}
+    <a class="site-logo" href="{{page_path 'help_center'}}">
+      <img src="{{settings.logo}}" alt="{{t 'home_page' name=help_center.name}}">
     </a>
-    {{search}}
-    <nav class="site-nav">
-      {{#link "help_center"}}{{t "home"}}{{/link}}
+    {{search submit=false instant=true}}
+    <nav class="site-nav" aria-label="{{t 'user_navigation'}}">
+      {{link 'community'}}
+      {{link 'new_request'}}
       {{#if signed_in}}
-        {{#link "requests"}}{{t "requests"}}{{/link}}
-        {{#link "sign_out"}}{{t "sign_out"}}{{/link}}
+        {{link 'requests'}}
+        {{link 'sign_out'}}
       {{else}}
-        {{#link "sign_in"}}{{t "sign_in"}}{{/link}}
+        {{#link 'sign_in'}}{{t 'sign_in'}}{{/link}}
       {{/if}}
     </nav>
   </div>

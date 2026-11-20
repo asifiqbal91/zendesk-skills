@@ -10,7 +10,7 @@ The official Copenhagen theme is built to be responsive and accessible, and Zend
 - **Keyboard:** every interactive control reachable and operable by keyboard; visible focus styles (don't remove outlines without replacing them); dropdowns (e.g. the language selector) operable without a mouse.
 - **Names and roles:** images have meaningful `alt` (empty `alt=""` for decorative); form fields have associated labels; menus use appropriate `role`/`aria-*` (see the cookbook language-selector markup which uses `role="menu"`/`menuitem` and `aria-haspopup`).
 - **Contrast:** text/background combinations meet contrast ratios. Because colors come from settings, pick accessible defaults and document that merchants must keep contrast when they re-skin.
-- **Don't fight the advanced helpers:** widgets like `request_form`, `wysiwyg`, `generative_answers` ship accessible markup; heavily overriding their internals with CSS/JS can break it.
+- **Don't fight Zendesk-rendered UI:** the v4 request form (Copenhagen module), `wysiwyg`, `generative_answers` ship accessible markup; heavily overriding their internals with CSS/JS can break it.
 - **Test:** run an automated audit (axe, Lighthouse) during local preview, then do a manual keyboard + screen-reader pass on article, search, and request-form flows.
 
 ## Responsiveness
@@ -21,7 +21,7 @@ The official Copenhagen theme is built to be responsive and accessible, and Zend
 
 ## SEO and metadata
 
-- Set a real `<title>` (`{{page_title}}`) and a meta description in `document_head.hbs`; expose Open Graph/Twitter tags where useful.
+- Zendesk injects `<title>` (and the favicon) itself — don't add them; there is no `page_title` property in v4. Add Open Graph/JSON-LD in `document_head.hbs` (site level) and `article_page.hbs` (`{{json article.title}}` etc.) where useful.
 - Use proper heading hierarchy and descriptive link text (`{{#link}}` block form), not "click here".
 - Don't block crawlers on public content; keep canonical/locale handling intact via `alternative_locales`.
 - Let the platform inject compiled CSS/JS — don't duplicate or block render with large head scripts.
@@ -35,7 +35,8 @@ The official Copenhagen theme is built to be responsive and accessible, and Zend
 ## Localization
 
 - Wrap all visible template copy in `{{t 'key'}}`; never hardcode UI strings.
-- Reserve top-level `translations.yml` for Settings-panel labels only; manage `translations/<locale>.json` for the rest.
+- `{{t}}` only resolves platform keys (`references/t-keys.txt`); `validate_theme.py` flags any other key. Copy without a platform key → a `text` setting (merchant-editable, single-language) or, for strings JavaScript creates, a small per-locale dictionary in your JS keyed by `<html lang>`.
+- `translations/<locale>.json` holds Settings-panel labels only.
 - Test at least one RTL locale if the theme targets multilingual help centers (`dir="{{direction}}"`).
 
 ## Marketplace submission readiness
@@ -47,12 +48,16 @@ Selling on the Zendesk Marketplace adds review requirements on top of a clean im
 - Versioning and a changelog; a support contact/path; clear install and customization docs.
 - No reliance on unsupported files/helpers; passes within plan/size limits.
 - Brand/quality conformance per Zendesk's current partner guidelines.
+- No hardcoded vendor content: placeholder status links, fake "all systems operational" badges, demo social URLs or your own brand name in fallbacks. Every link/label a buyer would change must be a setting (empty = hidden).
+- Neutral default logo/favicon (buyers see them before uploading their own).
+- Attribution for bundled third-party code (e.g. Copenhagen modules are Apache-2.0: keep the license and a notice).
+- Settings named with Copenhagen identifiers for colors/fonts so Zendesk-rendered UI matches the buyer's brand.
 
 Marketplace and partner requirements change over time — verify the current submission checklist in Zendesk's partner/Marketplace documentation before submitting rather than relying on this list alone.
 
 ## Pre-delivery gate (run all)
 
-1. `python3 scripts/validate_theme.py <theme>` passes with no errors.
+1. `python3 scripts/validate_theme.py <theme>` passes with no errors (it also checks `{{t}}` keys, removed helpers and Settings-panel limits).
 2. `zcli themes:preview` shows no unknown-helper/deprecation warnings for the theme's `api_version`.
 3. Automated a11y audit (axe/Lighthouse) clean on article, search, and new-request pages; manual keyboard pass done.
 4. Responsive check at 360px / tablet / desktop.

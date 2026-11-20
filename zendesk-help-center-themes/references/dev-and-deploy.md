@@ -72,14 +72,21 @@ Create export job → poll → download from `data.download.url`. Exporting is t
 
 You can connect a theme to a GitHub repo so updates deploy from Git. Caution: if you click **Edit code** in Guide on a GitHub-managed theme and proceed past the warning, the theme is **disconnected** from GitHub. Keep `manifest.json` and `assets/` in the repo and in sync to avoid losing settings when updating. See Zendesk's "Setting up the GitHub integration with your help center theme."
 
-## Limits (verify current numbers)
+## Limits
 
-- **Max 10 themes** total per brand.
-- Caps on **total settings** in `manifest.json`, **file size**, **file count**, **file name length**, **theme name length**, and **overall theme size** — exceeding any fails the import job with a specific error code (`TooManyThemes`, `ThemeTooBig`, `FileTooBig`, `TooManySettings`, `FileNameTooLong`, etc.).
-- **No template partials.**
-- Unsupported file types in `assets/` (e.g. PDFs in some versions) can block re-import until removed.
+| Limit | Value |
+| --- | --- |
+| Themes per brand | 10 |
+| Theme size | 55 MB |
+| All assets / one asset | 50 MB / 5 MB |
+| Asset file name | 50 chars (assets/ is flat — no subfolders) |
+| Template, `style.css`, `script.js` | 800 KB each |
+| Settings in `manifest.json` | 200 (identifier ≤ 30, label ≤ 40, description ≤ 80, list ≤ 20 options) |
+| Elements per page | 30 (use `{{pagination}}`) |
+| Custom pages / alternate templates per type | 100 / 100 |
 
-Confirm exact figures at the Guide theming limits article before delivery.
+No template partials. `scripts/validate_theme.py` enforces the size and settings limits. Source:
+<https://support.zendesk.com/hc/en-us/articles/4408831783962> (re-check before a release).
 
 ## Import job error codes (for debugging failed jobs)
 
@@ -106,6 +113,6 @@ ZD_SUBDOMAIN=acme ZD_EMAIL=a@b.com ZD_API_TOKEN=xxx \
 
 1. `zcli themes:preview .` and build against real data.
 2. Validate import constraints (required files, `logo`/`favicon`, limits).
-3. `zcli themes:import .` into a Sandbox brand; test interactive flows end-to-end.
+3. `zcli themes:import .` into a Sandbox brand; test interactive flows end-to-end: submit a request (attachment + conditional field), request list filters, reply + mark as solved, search filters, article vote/comment, community post.
 4. `zcli themes:update .` as you iterate; `zcli themes:publish` when ready.
 5. For CI, mirror this with the Themes API import/update/publish jobs.

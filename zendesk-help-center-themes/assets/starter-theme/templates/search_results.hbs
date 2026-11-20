@@ -1,17 +1,18 @@
-<main class="container">
-  <h1>{{t 'search_results'}}</h1>
-  {{! Optional AI answer (theme api_version permitting): {{generative_answers}} }}
+<main id="main-content" class="container">
+  {{search submit=false instant=true}}
+  {{generative_answers}}
+  <h1>{{#if results}}{{t 'results' query=query count=results_count}}{{else}}{{t 'search_results'}}{{/if}}</h1>
   {{#if results}}
   <ul class="search-results">
     {{#each results}}
     <li>
-      <a href="{{url}}">{{title}}</a>
-      {{! confirm snippet property name against search_results_page docs }}
+      <h2><a href="{{url}}">{{title}}</a></h2>
+      <p>{{text}}</p>
     </li>
     {{/each}}
   </ul>
   {{pagination}}
   {{else}}
-  <p>{{t 'no_results'}}</p>
+  <p>{{t 'no_results_unified_start_new_search'}}</p>
   {{/if}}
 </main>

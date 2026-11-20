@@ -1,12 +1,15 @@
-<main class="container">
+<main id="main-content" class="container">
   {{breadcrumbs}}
   <h1>{{category.name}}</h1>
   {{#if category.description}}<p class="lede">{{category.description}}</p>{{/if}}
   <div class="section-list">
     {{#each sections}}
     <section>
-      <h2>{{#link "section"}}{{name}}{{/link}}</h2>
-      {{#if description}}<p>{{description}}</p>{{/if}}
+      <h2><a href="{{url}}">{{name}}</a></h2>
+      <ul>
+        {{#each articles}}<li><a href="{{url}}">{{title}}</a></li>{{/each}}
+      </ul>
+      {{#if more_articles}}<a href="{{url}}">{{t 'show_all_articles' count=article_count}}</a>{{/if}}
     </section>
     {{/each}}
   </div>

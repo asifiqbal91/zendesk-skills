@@ -1,4 +1,11 @@
-<main class="container">
+<main id="main-content" class="container">
+  <img class="profile-avatar" src="{{user.avatar_url}}" alt="">
   <h1>{{user.name}}</h1>
-  {{my_profile}}
+  {{#if description}}<p>{{description}}</p>{{/if}}
+  {{subscribe}}
+  <dl>
+    <dt>{{t 'member_since'}}</dt>
+    <dd>{{#if member_since}}{{date member_since format='medium'}}{{else}}{{t 'no_activity_yet'}}{{/if}}</dd>
+    <dt>{{t 'total_activity'}}</dt><dd>{{total_activity}}</dd>
+  </dl>
 </main>

@@ -1,22 +1,27 @@
-<main class="container">
+<main id="main-content" class="container">
   {{breadcrumbs}}
   <h1>{{request.subject}}</h1>
-  <div class="request-description">{{request.description}}</div>
+  <p><span class="status status-{{request.status}}">{{request.status_name}}</span> #{{request.id}}</p>
+  {{satisfaction}}
 
-  {{#if comments}}
   <ul class="comment-list">
     {{#each comments}}
-    <li class="comment">
+    <li id="{{anchor}}" class="comment">
       <strong>{{author.name}}</strong>
-      <time>{{date created_at}}</time>
+      <time>{{date created_at timeago=true}}</time>
       <div>{{body}}</div>
+      {{#each attachments}}<a href="{{url}}" target="_blank">{{name}}</a>{{/each}}
     </li>
     {{/each}}
   </ul>
-  {{/if}}
+  {{pagination}}
+  {{comment_callout}}
 
   {{#form 'comment' class='comment-form'}}
-    {{wysiwyg 'body'}}
+    {{#if help_center.request_ccs_enabled}}{{token_field 'ccs'}}{{/if}}
+    {{wysiwyg 'body' rows='7'}}
+    {{upload}}
+    {{checkbox 'mark_as_solved'}} {{label 'mark_as_solved'}}
     {{input type='submit'}}
   {{/form}}
 </main>

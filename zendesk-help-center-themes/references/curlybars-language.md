@@ -6,7 +6,7 @@ Source: <https://developer.zendesk.com/api-reference/help_center/help-center-tem
 
 ## Table of contents
 - Expressions and literals
-- Escaping: `{{ }}` vs `{{{ }}}`
+- Escaping: always `{{ }}`
 - Help Center properties (paths, dot notation, `length`)
 - Conditional helpers: `if`, `unless`, `is`
 - How conditions are evaluated (truthiness)
@@ -32,10 +32,14 @@ Helper invocation syntax:
 ```
 Only the helper name is mandatory. Example: `{{excerpt article.title characters=50}}`.
 
-## Escaping: double vs triple
+## Escaping: always double-stache
 
-- `{{value}}` — HTML-escaped output. Default for anything user-influenced.
-- `{{{value}}}` — raw, unescaped output. Use only for trusted HTML or values like font stacks that must render literally (e.g. `{{{settings.heading_font}}}`).
+- `{{value}}` — HTML-escaped output. Use it for everything.
+- `{{{value}}}` — **don't.** The theme importer rejects triple-stache in practice and Copenhagen never uses it. Rich fields
+  (`article.body`, `post.details`, comment `body`, `request.description`) already render as safe HTML with `{{ }}`.
+- Values that must reach CSS unescaped (font stacks with quotes, image URLs, colors) go in the root `style.css` through
+  `$setting` substitution, not into a `<style>` block (see `manifest-and-settings.md`).
+- Values for JavaScript go through `{{json value}}`.
 
 ## Help Center properties
 
@@ -101,7 +105,9 @@ When a condition isn't already boolean:
   </li>
 {{/each}}
 ```
-Here `author` resolves against the current comment, not a top-level object. To reach the outer context from inside, use `../` (see below).
+Here `author` resolves against the current comment, not a top-level object. To reach the outer context from inside, use `../` (see below) — including globals: `../settings.show_x`, `../article.id`, `../has_multiple_categories`.
+
+`if`, `unless` and `is` do **not** change context (as in Handlebars); `each` and `with` do.
 
 ## Context: with and ../ escaping
 
@@ -158,4 +164,7 @@ Parentheses let you feed one helper's result into another, and let helpers appea
 - **No arbitrary helpers.** Only Curlybars built-ins + Help Center custom helpers work. A helper that works in vanilla Handlebars/Node may not exist here. Check `helpers-and-objects.md`.
 - **Version sensitivity.** Helpers can be deprecated between templating versions; previewing locally surfaces deprecation warnings for the theme's `api_version`.
 - **Settings as variables.** Manifest settings appear as `{{settings.identifier}}` in templates (and `$identifier` in CSS). They can be passed to helpers like any object: `{{#is settings.enabled}} ... {{/is}}`.
-- **Escape control characters in HTML attributes** by preferring `{{ }}`; reserve `{{{ }}}` for known-safe values.
+- **No triple-stache, no `~` on comments** (`{{~! … ~}}` is rejected; `~` on expressions like `{{~#if x~}}` is fine).
+- **Block helpers are not subexpressions.** `(concat "a" (#if x))` is invalid. For conditional classes emit a static class plus an attribute (`aria-current="page"`, `data-state`) and style the attribute.
+- **Hash arguments may contain hyphens**: `{{#link 'posts' aria-current='page'}}`, `{{#vote 'up' aria-describedby=(concat anchor "-body")}}`.
+- **`{{t}}` keys are fixed.** Only Help Center's keys resolve (`references/t-keys.txt`); a made-up key renders broken text.

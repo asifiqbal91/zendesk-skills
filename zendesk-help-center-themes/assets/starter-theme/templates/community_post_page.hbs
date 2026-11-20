@@ -1,0 +1,30 @@
+<main id="main-content" class="container">
+  {{breadcrumbs}}
+  <article>
+    <h1>{{post.title}}</h1>
+    <p><small>{{post.author.name}} · {{date post.created_at timeago=true}}</small></p>
+    <div class="post-body">{{post.details}}</div>
+    <div class="vote">
+      {{#with post}}
+        {{vote 'up' class='vote-up' selected_class='vote-voted'}}
+        {{vote 'sum' class='vote-sum'}}
+        {{vote 'down' class='vote-down' selected_class='vote-voted'}}
+      {{/with}}
+    </div>
+    {{subscribe}}
+  </article>
+  <section>
+    <h2>{{t 'comments'}}</h2>
+    <ul class="comment-list">
+      {{#each comments}}
+      <li id="{{anchor}}">{{#if official}}<strong>{{t 'official_comment'}}</strong>{{/if}} {{author.name}}<div>{{body}}</div></li>
+      {{/each}}
+    </ul>
+    {{pagination}}
+    {{#form 'comment' class='comment-form'}}
+      {{wysiwyg 'body'}}
+      {{input type='submit'}}
+    {{/form}}
+    <p>{{comment_callout}}</p>
+  </section>
+</main>

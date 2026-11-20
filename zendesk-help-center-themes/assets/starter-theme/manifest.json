@@ -66,8 +66,7 @@
           "description": "Maximum width of the main content column.",
           "value": 960,
           "min": 720,
-          "max": 1280,
-          "step": 20
+          "max": 1280
         }
       ]
     },

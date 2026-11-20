@@ -1,38 +1,50 @@
-<main class="container article-layout">
+<main id="main-content" class="container article-layout">
   {{breadcrumbs}}
   <article>
     <h1>{{article.title}}</h1>
     <div class="article-meta">
-      {{#with article.author}}<span>{{name}}</span>{{/with}}
-      <time>{{date article.created_at}}</time>
+      <span>{{article.author.name}}</span>
+      <time>{{date article.created_at timeago=true}}</time>
     </div>
     <div class="article-body">{{article.body}}</div>
 
-    <div class="article-votes vote">
-      {{vote 'up' class="vote-up"}}
-      {{vote 'sum' class="vote-sum"}}
-      {{vote 'down' class="vote-down"}}
+    {{#if attachments}}
+    <ul class="attachments">
+      {{#each attachments}}<li><a href="{{url}}" target="_blank">{{name}}</a> {{size}}</li>{{/each}}
+    </ul>
+    {{/if}}
+
+    {{#with article}}
+    <div class="article-votes">
+      <h2 id="votes-label">{{t 'was_this_article_helpful'}}</h2>
+      <div role="group" aria-labelledby="votes-label">
+        {{vote 'up' class='button' selected_class='button-selected'}}
+        {{vote 'down' class='button' selected_class='button-selected'}}
+      </div>
+      <small>{{vote 'label'}}</small>
     </div>
+    {{/with}}
+    <div>{{request_callout}}</div>
+    {{related_articles}}
   </article>
 
   <section class="article-comments">
-    {{#if comments}}
-      <h2>{{t 'comments'}}</h2>
-      <ul class="comment-list">
-        {{#each comments}}
-        <li id="{{anchor}}" class="comment">
-          <img class="comment-avatar" src="{{author.avatar_url}}" alt="">
-          <div class="comment-author">{{author.name}}</div>
-          <time>{{date created_at}}</time>
-          <div class="comment-body">{{body}}</div>
-        </li>
-        {{/each}}
-      </ul>
-    {{/if}}
-
+    <h2>{{t 'comments'}}</h2>
+    <ul class="comment-list">
+      {{#each comments}}
+      <li id="{{anchor}}" class="comment">
+        <img class="comment-avatar" src="{{author.avatar_url}}" alt="">
+        <div class="comment-author">{{author.name}}</div>
+        <time>{{date created_at timeago=true}}</time>
+        <div class="comment-body">{{body}}</div>
+      </li>
+      {{/each}}
+    </ul>
+    {{pagination}}
     {{#form 'comment' class='comment-form'}}
       {{wysiwyg 'body'}}
       {{input type='submit'}}
     {{/form}}
+    <p>{{comment_callout}}</p>
   </section>
 </main>

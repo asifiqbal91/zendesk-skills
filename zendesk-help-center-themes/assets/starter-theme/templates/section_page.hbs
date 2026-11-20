@@ -1,11 +1,16 @@
-<main class="container">
+<main id="main-content" class="container">
   {{breadcrumbs}}
   <h1>{{section.name}}</h1>
   {{#if section.description}}<p class="lede">{{section.description}}</p>{{/if}}
+  {{subscribe}}
+  {{#if section.articles}}
   <ul class="article-list">
-    {{#each articles}}
-    <li>{{#link "article"}}{{title}}{{/link}}</li>
+    {{#each section.articles}}
+    <li><a href="{{url}}">{{title}}</a></li>
     {{/each}}
   </ul>
-  {{pagination}}
+  {{pagination 'section.articles'}}
+  {{else}}
+  <p>{{t 'no_articles'}}</p>
+  {{/if}}
 </main>

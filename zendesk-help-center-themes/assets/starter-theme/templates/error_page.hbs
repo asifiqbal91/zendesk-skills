@@ -1,5 +1,10 @@
-<main class="container error">
-  <h1>{{error.title}}</h1>
-  <p>{{error.message}}</p>
-  {{#link "help_center"}}{{t "back_home"}}{{/link}}
+<main id="main-content" class="container error">
+  <h1>{{t 'oops'}}</h1>
+  {{#is error 'unauthorized'}}<p>{{link 'sign_in'}}</p>{{/is}}
+  {{#is error 'forbidden'}}<p>{{t 'not_authorized'}}</p>{{/is}}
+  {{#is error 'not_found'}}
+    <p>{{t 'nonexistent_page'}}</p>
+    <p>{{t 'mistyped_address_or_moved_page'}}</p>
+  {{/is}}
+  {{#link 'help_center'}}{{t 'back_to_homepage'}}{{/link}}
 </main>

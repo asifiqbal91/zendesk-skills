@@ -1,5 +1,14 @@
-<main class="container">
+<main id="main-content" class="container">
   <h1>{{t 'contributions'}}</h1>
-  {{! Build against the Contributions page docs:
-      https://developer.zendesk.com/api-reference/help_center/help-center-templates/contributions_page/ }}
+  <nav>{{#each filters}}<a href="{{url}}" {{#if selected}}aria-current="page"{{/if}}>{{name}}</a> {{/each}}</nav>
+  {{#if contributions}}
+  <ul>
+    {{#each contributions}}
+    <li><a href="{{url}}">{{title}}</a> <small>{{type}} · {{date last_activity_at}}</small></li>
+    {{/each}}
+  </ul>
+  {{pagination}}
+  {{else}}
+  <p>{{t 'no_contributions'}}</p>
+  {{/if}}
 </main>

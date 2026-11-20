@@ -27,9 +27,9 @@ Source: <https://support.zendesk.com/hc/en-us/articles/4408839332250-Customizing
 
 | File | Renders |
 | --- | --- |
-| `new_request_page.hbs` | The request/ticket submission form. |
+| `new_request_page.hbs` | The request/ticket submission form — v4: mount Copenhagen's `new-request-form` module on the `new_request_form` object (`recipes.md`); `{{request_form}}` no longer exists. |
 | `request_page.hbs` | An individual request/ticket page. |
-| `requests_page.hbs` | List of requests assigned to or CC'ing the user. |
+| `requests_page.hbs` | List of the user's requests — v4: Copenhagen's `request-list` module (`{{request_list}}` is deprecated). |
 | `subscriptions_page.hbs` | "Following" page — categories/sections/articles the user follows. |
 | `contributions_page.hbs` | A user's posts, community comments, and article comments. |
 | `user_profile_page.hbs` | A user's profile page. |
@@ -50,7 +50,15 @@ Source: <https://support.zendesk.com/hc/en-us/articles/4408839332250-Customizing
 | --- | --- |
 | `custom_page.hbs` (and named custom pages) | Pages you build from scratch and link from anywhere in the help center. Enterprise plans. |
 
-There are also service catalog and approval request page templates for accounts using those features — see the developer docs sidebar if the theme needs them.
+## Platform feature pages
+
+| File | Renders |
+| --- | --- |
+| `service_list_page.hbs`, `service_page.hbs` | Service catalog list / item — Copenhagen `service-catalog` module. |
+| `approval_request_list_page.hbs`, `approval_request_page.hbs` | Approvals — Copenhagen `approval-requests` module. |
+| `applications_page.hbs` | App catalog — `{{application_catalog}}`. |
+
+Include them in a portable/Marketplace theme; they only appear when the account has the feature.
 
 ## Multiple / alternate templates (Enterprise)
 

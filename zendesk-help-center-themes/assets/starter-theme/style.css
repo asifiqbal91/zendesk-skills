@@ -6,7 +6,7 @@
   --color-background: $color_background;
   --type-heading: $type_heading;
   --type-body: $type_body;
-  --content-max-width: #{$content_max_width}px;
+  --content-max-width: calc($content_max_width * 1px);
 
   --space-sm: 8px;
   --space-md: 16px;
@@ -73,3 +73,6 @@ a:hover { text-decoration: underline; }
 @media (max-width: 600px) {
   .site-header .container { flex-wrap: wrap; }
 }
+
+.skip-link { position: absolute; left: -9999px; }
+.skip-link:focus { left: 16px; top: 16px; padding: 8px 12px; background: var(--color-background); }

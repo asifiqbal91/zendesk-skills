@@ -1,0 +1,15 @@
+<main id="main-content" class="container">
+  {{breadcrumbs}}
+  <h1>{{t 'community_topics'}}</h1>
+  {{link 'new_post'}}
+  {{#if topics}}
+  <ul class="topic-list">
+    {{#each topics}}
+    <li><a href="{{url}}">{{name}}</a> <small>{{t 'post_count' count=post_count}}</small></li>
+    {{/each}}
+  </ul>
+  {{pagination}}
+  {{else}}
+  <p>{{t 'no_content'}}</p>
+  {{/if}}
+</main>

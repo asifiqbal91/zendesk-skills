@@ -1,28 +1,40 @@
-{{#is settings.show_hero true}}
+{{#if settings.show_hero}}
 <section class="hero">
   <div class="container">
     <h1>{{help_center.name}}</h1>
-    {{search submit=false}}
+    {{search submit=false instant=true}}
   </div>
 </section>
-{{/is}}
+{{/if}}
 
-<main class="container">
+<main id="main-content" class="container">
   {{#if categories}}
   <div class="category-grid">
     {{#each categories}}
     <section class="category-card">
-      <h2>{{#link "category"}}{{name}}{{/link}}</h2>
-      {{#if description}}<p>{{description}}</p>{{/if}}
+      <h2><a href="{{url}}">{{name}}</a></h2>
+      {{#if description}}<p>{{excerpt description characters=140}}</p>{{/if}}
       <ul>
         {{#each sections}}
-        <li>{{#link "section"}}{{name}}{{/link}}</li>
+        <li><a href="{{url}}">{{name}}</a></li>
         {{/each}}
       </ul>
     </section>
     {{/each}}
   </div>
+  {{pagination}}
   {{else}}
-  <p>{{t "no_categories"}}</p>
+  <p>{{t 'no_content'}}</p>
   {{/if}}
+
+  {{#if promoted_articles}}
+  <section>
+    <h2>{{t 'promoted_articles'}}</h2>
+    <ul>
+      {{#each promoted_articles}}<li><a href="{{url}}">{{title}}</a></li>{{/each}}
+    </ul>
+  </section>
+  {{/if}}
+
+  {{recent_activity}}
 </main>

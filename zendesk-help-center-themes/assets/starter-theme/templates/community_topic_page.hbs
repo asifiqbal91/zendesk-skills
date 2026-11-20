@@ -1,0 +1,16 @@
+<main id="main-content" class="container">
+  {{breadcrumbs}}
+  <h1>{{topic.name}}</h1>
+  {{#if topic.description}}<p>{{topic.description}}</p>{{/if}}
+  {{subscribe}} {{link 'new_post' topic_id=topic.id}}
+  {{#if posts}}
+  <ul class="post-list">
+    {{#each posts}}
+    <li><a href="{{url}}">{{title}}</a> <small>{{t 'vote' count=vote_sum}} · {{t 'comment' count=comment_count}}</small></li>
+    {{/each}}
+  </ul>
+  {{pagination}}
+  {{else}}
+  <p>{{t 'no_posts_with_filter'}}</p>
+  {{/if}}
+</main>

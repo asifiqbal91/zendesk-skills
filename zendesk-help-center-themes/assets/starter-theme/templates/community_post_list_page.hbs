@@ -1,0 +1,15 @@
+<main id="main-content" class="container">
+  {{breadcrumbs}}
+  <h1>{{t 'all_posts'}}</h1>
+  {{link 'new_post'}}
+  {{#if posts}}
+  <ul class="post-list">
+    {{#each posts}}
+    <li><a href="{{url}}">{{title}}</a> <small>{{author.name}} · {{date created_at timeago=true}}</small></li>
+    {{/each}}
+  </ul>
+  {{pagination}}
+  {{else}}
+  <p>{{t 'no_posts_with_filter'}}</p>
+  {{/if}}
+</main>
